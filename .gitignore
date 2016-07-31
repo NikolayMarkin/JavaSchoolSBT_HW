@@ -8,5 +8,15 @@
 *.war
 *.ear
 
+HW01/.idea/
+HW01/out/
+HW02/.idea/
+HW02/out/
+HW03/.idea/
+HW03/out/
+HW04/.idea/
+HW04/out/
+
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
