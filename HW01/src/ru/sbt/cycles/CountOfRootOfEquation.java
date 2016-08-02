@@ -2,9 +2,6 @@ package ru.sbt.cycles;
 
 import java.util.Scanner;
 
-/**
- * Created by Nikolay on 26.07.2016.
- */
 public class CountOfRootOfEquation {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -20,15 +17,6 @@ public class CountOfRootOfEquation {
 
         if (a == 0 || (b == 0 && c == 0)) {
             System.out.println(1);
-            return;
-        }
-
-        if (b != 0 && c == 0) {
-            System.out.println(2);
-        }
-
-        if (b == 0 && c != 0 && -c / a < 0) {
-            System.out.println(0);
             return;
         }
 
