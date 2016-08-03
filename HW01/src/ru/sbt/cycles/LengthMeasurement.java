@@ -15,10 +15,14 @@ public class LengthMeasurement {
         int oneInch = 3;
         // в одном футе 12 дюймов
         int oneFt = oneInch * 12;
-        int minVal = 10001;
 
-//        int countOfFts = Math..lengthInCm
+        int countOfFts = lengthInCm / oneFt;
+        int mod = lengthInCm % oneFt;
+        int countOfInch = mod / oneInch;
+        if (mod % oneInch > 0) {
+            countOfInch += mod % oneInch == 1 ? 0 : 1;
+        }
 
-//        System.out.println(index);
+        System.out.println(countOfFts + " " + countOfInch);
     }
 }

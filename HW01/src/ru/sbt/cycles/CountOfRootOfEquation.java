@@ -15,9 +15,33 @@ public class CountOfRootOfEquation {
             return;
         }
 
-        if (a == 0 || (b == 0 && c == 0)) {
-            System.out.println(1);
+        if (a == 0 && b == 0) {
+            System.out.println(-1);
             return;
+        }
+
+        if (a == 0 || b == 0 || c == 0) {
+
+            if (a == 0 || (b == 0 && c == 0)) {
+                System.out.println(1);
+                return;
+            }
+            if (b == 0 && c != 0) {
+                double cdiva = -(double) c / (double) a;
+                if (cdiva > 0) {
+                    System.out.println(2);
+                    return;
+                } else if (cdiva < 0) {
+                    System.out.println(0);
+                    return;
+                }
+                System.out.println(1);
+                return;
+            }
+            if (b != 0 && c == 0) {
+                System.out.println(2);
+                return;
+            }
         }
 
         int discriminant = b * b - 4 * a * c;
