@@ -4,32 +4,51 @@ import ru.sbt.terminal.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        // write your code here
-//        try (Db db = new DbImpl()) {
-//            Store store = new DataBaseStore(db);
-//
-//            store.getAll();
-//
-//        } catch (Exception ignore) {
-//            ignore.printStackTrace();
-//        }
+    public static void main(String[] args) throws InterruptedException {
+        Terminal terminal = getTerminal();
 
-//        Validator validator = new ValidatorImpl();
-//        validator.validateAccount("10001");
-//        validator.validatePin("123");
-////        validator.validateAccount("100");
-//        validator.validateAccount("10000");
+        if (terminal.startSession("wrong account number")) {
+
+        } else {
+            if (terminal.startSession("10001")) {
+
+                terminal.getAccountBalance();
+
+                terminal.enterPin("wrong pin");
+
+                terminal.enterPin("1235");
+                terminal.enterPin("1235");
+                terminal.enterPin("1235");
+
+                terminal.getAccountBalance();
+
+                // необходимо подождать когда счет разблокируется
+                System.out.println("Ждем 3 секунды");
+                Thread.sleep(3 * 1000);
+                terminal.enterPin("1234");
+                System.out.println("Ждем еще 2 секунды");
+                Thread.sleep(3 * 1000);
 
 
-        Terminal terminal = new TerminalImpl(new TerminalServerImpl(), new ValidatorImpl());
-        if (terminal.startSession("10001"))
-        {
-            terminal.enterPin("1234");
+                // корректный пин
+                terminal.enterPin("1234");
+
+                terminal.getAccountBalance();
+
+                terminal.getCash(150);
+                terminal.getCash(200);
+
+                terminal.putCash(150);
+                terminal.putCash(500);
+
+                terminal.getCash(300);
+
+                terminal.stopSession();
+            }
         }
+    }
 
-
-
-
+    private static Terminal getTerminal() {
+        return new TerminalImpl(new TerminalServerImpl(), new ValidatorImpl());
     }
 }

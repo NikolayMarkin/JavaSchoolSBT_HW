@@ -1,15 +1,15 @@
 package ru.sbt.terminal;
 
 public interface Terminal {
-    void startSession(String accountNumber);
+    boolean startSession(String accountNumber);
 
-    void enterPin(String pin);
+    boolean enterPin(String pin);
 
-    int getAccountBalance();
+    void getAccountBalance();
 
-    int getCash(int sum);
+    void getCash(int sum);
 
-    int putCash(int sum);
+    void putCash(int sum);
 
     void stopSession();
 }
