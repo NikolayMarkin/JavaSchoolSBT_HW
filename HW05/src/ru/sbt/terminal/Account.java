@@ -1,5 +1,7 @@
 package ru.sbt.terminal;
 
+import ru.sbt.terminal.exceptions.InsufficientFundsException;
+
 public class Account {
     private final String accountNumber;
     private final String pin;
@@ -29,7 +31,7 @@ public class Account {
 
     public int getCash(int cash) {
         if (cash > balance) {
-            throw new RuntimeException("Не достаточно средств для снятия такой суммы");
+            throw new InsufficientFundsException("Не достаточно средств для снятия такой суммы");
         }
         balance -= cash;
         return balance;

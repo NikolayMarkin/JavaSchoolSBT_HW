@@ -1,8 +1,6 @@
 package ru.sbt.terminal;
 
-import ru.sbt.terminal.exceptions.AccountNotFoundException;
-import ru.sbt.terminal.exceptions.WrongPinException;
-import ru.sbt.terminal.exceptions.WrongUserInputException;
+import ru.sbt.terminal.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,6 @@ public class TerminalServerImpl implements TerminalServer {
         list.add(new Account("10003", "1278"));
 
         return list;
-
     }
 
     @Override
@@ -30,6 +27,7 @@ public class TerminalServerImpl implements TerminalServer {
         for (Account account : accountList) {
             if (account.getAccountNumber().equals(accountNumber)) {
                 curAccount = account;
+                return;
             }
         }
         throw new AccountNotFoundException("Такой счет нe зарегистрирован");
@@ -44,21 +42,25 @@ public class TerminalServerImpl implements TerminalServer {
 
     @Override
     public int getAccountBalance() {
-        return 0;
+        return curAccount.getBalance();
     }
 
     @Override
     public int getCash(int sum) {
-        return 0;
+        try {
+            return curAccount.getCash(sum);
+        } catch (InsufficientFundsException e){
+            throw new TerminalServerException("Сервер: ошибка счета: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public int putCash(int sum) {
-        return 0;
+        return curAccount.putCash(sum);
     }
 
     @Override
     public void closeSession() {
-
+        curAccount = null;
     }
 }
