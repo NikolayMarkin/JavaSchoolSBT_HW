@@ -44,4 +44,23 @@ public class RegistrationServiceImplTest {
         doThrow(new IllegalArgumentException()).when(accountService).addNewUser(newUser);
         registrationService.registerNewUser(login, password, email);
     }
+
+    @Test
+    public void isRegisteredUserTest(){
+        String login = "user1";
+        String password = "pass";
+        String email = "user1@mail.ru";
+        UserProfile userProfile = new UserProfile(login, password, email);
+        when(accountService.getUserByLogin(login)).thenReturn(userProfile);
+
+        assertEquals(registrationService.isRegisteredUser(login), true);
+    }
+
+    @Test
+    public void isRegisteredUserTestUnregistered(){
+        String login = "unregister";
+        when(accountService.getUserByLogin(login)).thenReturn(null);
+
+        assertEquals(registrationService.isRegisteredUser(login), false);
+    }
 }

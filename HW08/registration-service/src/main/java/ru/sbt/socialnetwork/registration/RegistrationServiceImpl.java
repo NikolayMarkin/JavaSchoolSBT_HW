@@ -16,4 +16,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         accountService.addNewUser(userProfile);
     }
+
+    @Override
+    public boolean isRegisteredUser(String login) {
+        return accountService.getUserByLogin(login) != null;
+    }
 }

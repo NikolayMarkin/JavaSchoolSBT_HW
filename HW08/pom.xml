@@ -13,6 +13,7 @@
         <module>account-service</module>
         <module>message-service</module>
         <module>registration-service</module>
+        <module>authorization-service</module>
     </modules>
 
     <build>
