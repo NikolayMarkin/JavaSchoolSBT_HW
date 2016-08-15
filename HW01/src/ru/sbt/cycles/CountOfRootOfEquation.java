@@ -2,9 +2,6 @@ package ru.sbt.cycles;
 
 import java.util.Scanner;
 
-/**
- * Created by Nikolay on 26.07.2016.
- */
 public class CountOfRootOfEquation {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -18,18 +15,33 @@ public class CountOfRootOfEquation {
             return;
         }
 
-        if (a == 0 || (b == 0 && c == 0)) {
-            System.out.println(1);
+        if (a == 0 && b == 0) {
+            System.out.println(-1);
             return;
         }
 
-        if (b != 0 && c == 0) {
-            System.out.println(2);
-        }
+        if (a == 0 || b == 0 || c == 0) {
 
-        if (b == 0 && c != 0 && -c / a < 0) {
-            System.out.println(0);
-            return;
+            if (a == 0 || (b == 0 && c == 0)) {
+                System.out.println(1);
+                return;
+            }
+            if (b == 0 && c != 0) {
+                double cdiva = -(double) c / (double) a;
+                if (cdiva > 0) {
+                    System.out.println(2);
+                    return;
+                } else if (cdiva < 0) {
+                    System.out.println(0);
+                    return;
+                }
+                System.out.println(1);
+                return;
+            }
+            if (b != 0 && c == 0) {
+                System.out.println(2);
+                return;
+            }
         }
 
         int discriminant = b * b - 4 * a * c;

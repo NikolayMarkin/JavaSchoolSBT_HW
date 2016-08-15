@@ -2,10 +2,7 @@ package ru.sbt.arrays;
 
 import java.util.Scanner;
 
-/**
- * Created by oti on 22.07.2016.
- */
-public class TwoReverse {
+public class Ex2027 {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -35,7 +32,12 @@ public class TwoReverse {
     }
 
     public static void reverseArray(int[] ar, int l, int r){
-        for (int i = l, j = 0; i < l + r / 2; j++, i++){
+        for (int i = l; l < l + r / 2; i++) {
+            int tmp = ar[i];
+            ar[i] = ar[r - j];
+            ar[r - j] = tmp;
+        }
+        for (int i = l, j = 0; i < l + r / 2 - ((r - l) % 2 ); j++, i++){
             int tmp = ar[i];
             ar[i] = ar[r - j];
             ar[r - j] = tmp;
