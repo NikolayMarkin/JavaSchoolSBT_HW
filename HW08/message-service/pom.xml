@@ -11,5 +11,13 @@
 
     <artifactId>message-service</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>ru.sbt.social-network</groupId>
+            <artifactId>account-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 
 </project>
