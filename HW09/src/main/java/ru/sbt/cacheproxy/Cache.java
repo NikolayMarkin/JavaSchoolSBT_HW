@@ -12,6 +12,6 @@ public @interface Cache {
     CacheType cacheType() default CacheType.IN_MEMORY;
     String fileNamePrefix() default "";
     boolean zip() default false;
-    Class[] identityBy() default {};
-    int listList() default 100;
+    byte[] identityBy() default {};
+    int listSize() default -1;
 }
