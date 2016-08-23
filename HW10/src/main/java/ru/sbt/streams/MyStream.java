@@ -8,12 +8,12 @@ public class MyStream<T> {
 
     private final List<T> collection;
 
-    private MyStream(List<? extends T> collection) {
+    private MyStream(Collection<? extends T> collection) {
         this.collection = new ArrayList<>(collection);
     }
 
-    public static <T> MyStream<T> of(List<T> list) {
-        return new MyStream<T>(list);
+    public static <T> MyStream<T> of(Collection<T> collection) {
+        return new MyStream<T>(collection);
     }
 
 
