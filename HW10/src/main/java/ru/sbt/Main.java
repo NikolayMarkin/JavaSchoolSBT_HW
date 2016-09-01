@@ -22,7 +22,5 @@ public class Main {
                 .toMap(p -> p.getName(), p -> p);
 
         System.out.println(stringPersonMap);
-
-
     }
 }
