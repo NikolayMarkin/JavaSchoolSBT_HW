@@ -30,7 +30,7 @@ public class FixedThreadPool implements ThreadPool {
         }
     }
 
-    public class Worker extends Thread {
+    private class Worker extends Thread {
         @Override
         public void run() {
             while (true) {
