@@ -1,8 +1,7 @@
 package ru.sbt.threadpool;
 
-import java.util.ArrayDeque;
-import java.util.HashSet;
-import java.util.Queue;
+
+import java.util.*;
 
 public class ScalableThreadPool implements ThreadPool {
     private final Object lock = new Object();
@@ -10,9 +9,9 @@ public class ScalableThreadPool implements ThreadPool {
     private final int maxNumOfThreads;
     private final TaskQueue tasks = new TaskQueue();
 
-    private volatile int numOfActiveWorkers;
+    private volatile int curNumOfThreads;
 
-    private final HashSet<Worker> workers = new HashSet<>();
+    private final List<Worker> workers = new ArrayList<>();
 
     public ScalableThreadPool(int minNumOfThreads, int maxNumOfThreads) {
         this.minNumOfThreads = minNumOfThreads;
@@ -30,6 +29,7 @@ public class ScalableThreadPool implements ThreadPool {
         Worker w = new Worker();
         workers.add(w);
         w.start();
+        curNumOfThreads++;
     }
 
     @Override
@@ -47,29 +47,50 @@ public class ScalableThreadPool implements ThreadPool {
         public void add(Runnable task) {
             tasks.add(task);
 
-            if (tasks.size() > 1 && numOfActiveWorkers < maxNumOfThreads) {
+            if (tasks.size() > 1 && curNumOfThreads < maxNumOfThreads) {
                 createAndStartWorker();
             }
         }
 
         public Runnable poll() {
             Runnable task = tasks.poll();
-            if (tasks.size() == 1 && numOfActiveWorkers > minNumOfThreads + 1) {
-                // удалить один 
-            }
+
             return task;
         }
 
-        public boolean isEmpty() {
-            return tasks.isEmpty();
+        private void deleteWorker() {
+            for (ListIterator<Worker> iterator = workers.listIterator(); iterator.hasNext();) {
+                Worker worker = iterator.next();
+                if (worker.isWaitNewTask()) {
+                    worker.interrupt();
+                    iterator.remove();
+                    curNumOfThreads--;
+                    return;
+                }
+            }
+            return;
         }
 
-        public int size() {
-            return tasks.size();
+        public boolean isEmpty() {
+            boolean empty = tasks.isEmpty();
+            if (empty && curNumOfThreads > minNumOfThreads) {
+                deleteWorker();
+            }
+            return empty;
         }
     }
 
+    public void interrupt() {
+        workers.forEach(Thread::interrupt);
+    }
+
     private class Worker extends Thread {
+        private volatile boolean waitNewTask;
+
+        public boolean isWaitNewTask() {
+            return waitNewTask;
+        }
+
         @Override
         public void run() {
             while (true) {
@@ -78,17 +99,19 @@ public class ScalableThreadPool implements ThreadPool {
                 synchronized (lock) {
                     while (tasks.isEmpty()) {
                         try {
+                            waitNewTask = true;
                             lock.wait();
                         } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
+                            // значит поток прервали, с  целью удаления из пула
+                            System.out.println("завершаю работу");
+                            return;
                         }
                     }
+                    waitNewTask = false;
                     task = tasks.poll();
-                    numOfActiveWorkers++;
                 }
 
                 execute(task);
-                numOfActiveWorkers--;
             }
         }
 
