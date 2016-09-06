@@ -2,15 +2,18 @@ package ru.sbt.concurrentpack;
 
 import java.util.List;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class ContextImpl implements Context {
 
     private final List<Future<?>> tasks;
+    private final CountDownLatch barrier;
 
-    public ContextImpl(List<Future<?>> tasks) {
+    public ContextImpl(List<Future<?>> tasks, CountDownLatch barrier) {
         this.tasks = tasks;
+        this.barrier = barrier;
     }
 
     @Override
@@ -63,11 +66,6 @@ public class ContextImpl implements Context {
 
     @Override
     public boolean isFinished() {
-        for (Future<?> task : tasks) {
-            if (!task.isDone()) {
-                return false;
-            }
-        }
-        return true;
+        return barrier.getCount() == 0;
     }
 }
