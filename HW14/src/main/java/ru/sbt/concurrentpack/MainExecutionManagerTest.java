@@ -38,7 +38,6 @@ public class MainExecutionManagerTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-//
         context.interrupt();
         System.out.println("Количество прерванных задач: " + context.getInterruptedTaskCount());
 
