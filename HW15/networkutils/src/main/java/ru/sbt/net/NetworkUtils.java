@@ -9,27 +9,26 @@ public class NetworkUtils {
     public static <T extends Serializable> void sendObject(Socket socket, T object) {
         try {
             OutputStream outputStream = socket.getOutputStream();
-            outputStream.write(SerializationUtils.serializeToByte(object));
-            outputStream.flush();
+            DataOutputStream dos = new DataOutputStream(outputStream);
+            byte[] buffer = SerializationUtils.serializeToByte(object);
+
+            dos.writeInt(buffer.length);
+            dos.write(buffer);
         } catch (IOException e) {
             throw new RuntimeException("Не удалось записать данные в сокет", e);
         }
     }
 
-    public static <T extends Serializable> T getDataFromSocket(Socket server) {
+    public static <T extends Serializable> T getDataFromSocket(Socket socket) {
         try {
-            InputStream inputStream = server.getInputStream();
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            byte[] data = new byte[1024];
+            InputStream input = socket.getInputStream();
+            DataInputStream dis = new DataInputStream(input);
 
-            int nRead;
-            while ((nRead = inputStream.read(data, 0, data.length)) > 0) {
-                nRead = inputStream.read(data, 0, data.length);
-                buffer.write(data, 0, nRead);
-            }
-            buffer.flush();
+            int dataLength = dis.readInt();
+            byte[] data = new byte[dataLength];
+            dis.readFully(data);
 
-            return SerializationUtils.deserialize(buffer.toByteArray());
+            return SerializationUtils.deserialize(data);
         } catch (IOException e) {
             throw new RuntimeException("Не удалось считать данные из сокета", e);
         }

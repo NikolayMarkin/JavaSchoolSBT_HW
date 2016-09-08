@@ -9,9 +9,16 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class ServerRegistrator {
+    public static final int NUMBER_OF_THREADS = 4;
+
     public static void listen(int port, Object impl) {
+
+        final ExecutorService threadPool = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
         ServerSocket serverSocket = null;
         try {
@@ -22,43 +29,15 @@ public class ServerRegistrator {
 
 
         while (true) {
-            try (Socket client = serverSocket.accept()) {
+            try {
+                Socket client = serverSocket.accept();
 
-                Request request = NetworkUtils.getDataFromSocket(client);
+                threadPool.execute(new Worker(client, impl));
 
-                Response response = calculateResponse(impl, request);
-
-                NetworkUtils.sendObject(client, response);
-
-                client.close();
             } catch (IOException e) {
                 throw new RuntimeException("Ошибка отрытия сокета", e);
             }
         }
-    }
-
-    private static Response calculateResponse(Object impl, Request request) {
-        Object[] requestArgs = request.getArgs();
-        Class<?>[] parameterTypes = new Class<?>[requestArgs.length];
-        for (int i = 0; i < requestArgs.length; i++) {
-            parameterTypes[i] = requestArgs[i].getClass();
-        }
-
-        Method method = null;
-        try {
-            method = impl.getClass().getMethod(request.getMethodName(), parameterTypes);
-        } catch (NoSuchMethodException e) {
-            return new Response(null, e);
-        }
-
-        Object result = null;
-        Throwable e = null;
-        try {
-            result = method.invoke(impl, requestArgs);
-        } catch (Exception e1) {
-            e = e1.getCause();
-        }
-        return new Response(result, e);
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
