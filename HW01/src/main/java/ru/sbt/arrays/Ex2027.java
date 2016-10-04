@@ -32,15 +32,15 @@ public class Ex2027 {
     }
 
     public static void reverseArray(int[] ar, int l, int r){
-        for (int i = l; l < l + r / 2; i++) {
-            int tmp = ar[i];
-            ar[i] = ar[r - j];
-            ar[r - j] = tmp;
-        }
-        for (int i = l, j = 0; i < l + r / 2 - ((r - l) % 2 ); j++, i++){
-            int tmp = ar[i];
-            ar[i] = ar[r - j];
-            ar[r - j] = tmp;
-        }
+//        for (int i = l; l < l + r / 2; i++) {
+//            int tmp = ar[i];
+//            ar[i] = ar[r - j];
+//            ar[r - j] = tmp;
+//        }
+//        for (int i = l, j = 0; i < l + r / 2 - ((r - l) % 2 ); j++, i++){
+//            int tmp = ar[i];
+//            ar[i] = ar[r - j];
+//            ar[r - j] = tmp;
+//        }
     }
 }
