@@ -32,6 +32,9 @@ HW14/.idea/
 HW15/.idea/
 HW17/.idea/
 HW17/target/
+HW17.1/.idea/
+HW17.1/target/
+HW17.1/salary-report/target/
 *.iml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
