@@ -22,6 +22,7 @@
     </build>
     <modules>
         <module>salary-report</module>
+        <module>tractor</module>
     </modules>
 
 
